@@ -1,0 +1,81 @@
+<mvc:View
+	controllerName="sap.ui.demo.basicTemplate.controller.Home"
+	displayBlock="true"
+	xmlns="sap.m"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:lab="it.designfuture.chartjs">
+
+	<Page
+		id="page"
+		title="Ölstand">
+
+		<IconTabBar
+			expanded="true"
+			class="sapUiResponsiveContentPadding">
+			<items>
+
+				<IconTabFilter
+					text="Diagramm">
+						<VBox width="20rem">
+							<f:SimpleForm editable="true" 
+								layout="ResponsiveGridLayout" 
+								labelSpanXL="3"
+								labelSpanL="3"
+								labelSpanM="3"
+								labelSpanS="3">
+								<Label text="Jahr"/>
+								<StepInput textAlign="Center"
+									value="{data>/selectedYear}"
+									width="10rem"
+									change=".updateChartData"/>
+							</f:SimpleForm>
+						</VBox>
+						<lab:LineChartJS
+							id="lineChart"
+							datasets="{data>/datasets}"
+							titleDisplay="true"
+							titleText="Daten"
+							tooltipEnabled="true"
+							animationDuration="50"
+							onAnimationProgress="onAnimationProgress"
+							onAnimationComplete=".onAnimationComplete"
+							showLines="true"
+							spanGaps="true">
+						</lab:LineChartJS>
+				</IconTabFilter>
+
+				<IconTabFilter
+					text="Tabelle">
+					<Table inset="true" items="{ path: 'data>/data', sorter: { path: 'timestamp', descending: false, group: '.groupByYear' } }">
+						<headerToolbar>
+							<Toolbar>
+								<Title text="Messdaten"/>
+								<ToolbarSpacer/>
+								<Button text="Download" type="Emphasized" press=".downloadCsv"/>
+							</Toolbar>
+						</headerToolbar>
+						<columns>
+							<Column>
+								<Text text="Zeitstempel"/>
+							</Column>
+							<Column>
+								<Text text="Füllstand"/>
+							</Column>
+							<Column>
+								<Text text="Höhenabweichung"/>
+							</Column>
+						</columns>
+
+						<ColumnListItem>
+							<Text text="{ path: 'data>timestamp', formatter: '.formatter.formatTimestamp' }"/>
+							<Text text="{data>volume}"/>
+							<Text text="{data>distance}"/>
+						</ColumnListItem>
+					</Table>
+				</IconTabFilter>
+			</items>
+		</IconTabBar>
+
+	</Page>
+</mvc:View>
